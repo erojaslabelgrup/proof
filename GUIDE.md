@@ -22,7 +22,7 @@
 - Se podría agrupar en grupos
 - Pone `proyectos` en vez de `projects`
 
-:green_circle: Tenemos un middleware que queremos aplicar a todos los endpoints que cuelgan de `/projects`, ¿cómo lo harías?
+:yellow_circle: Tenemos un middleware que queremos aplicar a todos los endpoints que cuelgan de `/projects`, ¿cómo lo harías?
 > Agruparía las rutas de `projects` y aplicaría el middleware en el grupo. Por ejemplo:
 
 ```php
