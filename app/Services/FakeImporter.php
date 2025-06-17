@@ -19,7 +19,7 @@ class FakeImporter
                'name' => fake()->firstName() . ' ' . fake()->lastName(),
                'email' => fake()->unique()->safeEmail(),
                'password' => fake()->password(8, 16),
-               'import' => fake()->boolean
+               'is_admin' => fake()->boolean
            ];
         }
 

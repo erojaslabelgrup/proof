@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use App\Services\FakeImporter;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 
 class ImportadorUsuarios extends Command
 {
@@ -32,7 +33,12 @@ class ImportadorUsuarios extends Command
                 $data = FakeImporter::users($page); // return param users and total_pages
 
                 foreach ($data['users'] as $user_data) {
-                    User::create([$user_data]);
+                    User::create([
+                        'name' => $user_data['name'],
+                        'email' => $user_data['email'],
+                        'password' => Hash::make($user_data['password']),
+                        'is_admin' => $user_data['is_admin'],
+                    ]);
                 }
             } catch (\Throwable $th) {
                 break; // Break the loop if an error occurs
