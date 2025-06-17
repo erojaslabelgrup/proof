@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Task;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title')->index();
-            $table->enum('status', \App\Models\Task::STATUSES)->index();
+            $table->enum('status', Task::STATUSES)->index();
             $table->text('description')->nullable();
             $table->timestamps();
         });

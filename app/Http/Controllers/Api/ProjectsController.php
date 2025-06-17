@@ -13,12 +13,12 @@ class ProjectsController extends Controller
         return Project::all();
     }
 
-    public function store(Request $request)
+    public function store($request)
     {
         return Project::create($request->all());
     }
 
-    public function update($id, Request $request)
+    public function update($id, $request)
     {
         $project = Project::where('id', $id)->first();
         $project->update($request->all());

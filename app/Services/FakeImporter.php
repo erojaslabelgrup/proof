@@ -16,6 +16,7 @@ class FakeImporter
 
         for($i = 0; $i < 1000; $i++) {
            $users[] = [
+               'identifier' => fake()->uuid(),
                'name' => fake()->firstName() . ' ' . fake()->lastName(),
                'email' => fake()->unique()->safeEmail(),
                'password' => fake()->password(8, 16),
