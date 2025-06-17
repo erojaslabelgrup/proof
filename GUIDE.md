@@ -80,7 +80,7 @@ Route::middleware(\App\Http\Middleware\OnlyIsAdmin::class)->prefix('projects')->
 :red_circle: Dado el servicio anterior, ¿como solventarias la evolución de este cuando haya cambios que rompe la compatibilidad en proyectos donde se usa?
 > Implementaría un sistema de versiones en el paquete del servicio. Cada vez que se realice un cambio que rompa la compatibilidad, incrementaría la versión principal del paquete y documentaría los cambios necesarios para actualizar los proyectos que lo utilizan. Además, proporcionaría una guía de migración para facilitar la actualización a los desarrolladores.
 
-### Command `ImportadorUsuarios` teniendo en cuenta que el FakeImporter es un request a una API externa
+### Command `ImportUsers` teniendo en cuenta que el FakeImporter es un request a una API externa
 ¿Porque está mal el código?
 - :green_circle: No hay una validación, ni se mira si el usuario ya existe lo que dará conflictos al insertar.
 - :red_circle: Está mal planteado, ya que se debería extraer en una función y usar la recursividad.
