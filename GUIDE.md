@@ -63,12 +63,17 @@ Route::middleware(\App\Http\Middleware\OnlyIsAdmin::class)->prefix('projects')->
 
 ## Bonus track
 
-### Preguntas generales
+### Observer
+:yellow_circle: ¿Como harías para que cada vez que se cambia el estado de una tarea se envíe una notificación a todos los watchers?
+> Implementaría un Observer para el modelo `Task` que escuche el evento `updated`. En este Observer, verificaría si el estado de la tarea ha cambiado y, si es así, enviaría una notificación a todos los watchers asociados a esa tarea. Esto se puede hacer utilizando el método `notify` en la colección de watchers.
+
+### Polimorfica
 :red_circle: Para hacer que un usuario pueda observar tanto un proyecto como una tarea, ¿cómo debería de ser la relación en el modelo `Watcher`? ¿Es correcto como está?
 > Debería de ser una relación polimórfica para que el modelo `Watcher` pueda observar tanto proyectos como tareas. Actualmente, no es correcto ya que no se ha implementado una relación polimórfica.
 > 
 > Para implementar esto, modificaría el modelo `Watcher` para incluir una relación polimórfica y crearía las migraciones necesarias para agregar las columnas `watchable_id` y `watchable_type` en la tabla `watchers`.
 
+### Paquete
 :red_circle: Tenemos un servicio que queremos usar en distintos proyectos. ¿Que planteamiento harías?
 > Crearía un paquete de Laravel que encapsule la lógica del servicio y lo haga reutilizable en diferentes proyectos. Este paquete podría ser instalado a través de Composer y configurado según las necesidades de cada proyecto.
 
