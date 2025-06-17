@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Project extends Model
 {
@@ -27,13 +30,18 @@ class Project extends Model
         'status'
     ];
 
-    public function admin()
+    public function admin(): BelongsTo
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
 
-    public function tasks()
+    public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function watchers(): MorphMany
+    {
+        return $this->morphMany(Watcher::class, 'watchable')->with('user');
     }
 }

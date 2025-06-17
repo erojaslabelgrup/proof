@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('watchers', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('project_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('task_id')->nullable()->constrained()->onDelete('cascade');
+            $table->morphs('watchable');
             $table->timestamps();
         });
     }

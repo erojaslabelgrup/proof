@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Task extends Model
 {
@@ -18,7 +19,7 @@ class Task extends Model
         self::STATUS_IN_PROGRESS,
         self::STATUS_TESTING,
         self::STATUS_DONE,
-        self::STATUS_CANCELED
+        self::STATUS_CANCELED,
     ];
 
     protected $fillable = [
@@ -26,7 +27,7 @@ class Task extends Model
         'user_id',
         'title',
         'status',
-        'description'
+        'description',
     ];
 
     public function user(): BelongsTo
@@ -37,5 +38,10 @@ class Task extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function watchers(): MorphMany
+    {
+        return $this->morphMany(Watcher::class, 'watchable')->with('user');
     }
 }

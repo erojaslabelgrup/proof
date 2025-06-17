@@ -9,8 +9,8 @@ class Watcher extends Model
 {
     protected $fillable = [
         'user_id',
-        'project_id',
-        'task_id'
+        'watchable_type',
+        'watchable_id'
     ];
 
     public function user(): BelongsTo
@@ -18,13 +18,8 @@ class Watcher extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function project(): BelongsTo
+    public function watchable(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
-    }
-
-    public function task(): BelongsTo
-    {
-        return $this->belongsTo(Task::class);
+        return $this->morphTo();
     }
 }

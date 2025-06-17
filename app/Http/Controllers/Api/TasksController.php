@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TareasController extends Controller
+class TasksController extends Controller
 {
     public function index(Project $project, Request $request): JsonResponse
     {

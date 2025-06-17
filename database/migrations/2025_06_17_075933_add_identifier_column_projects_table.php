@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->string('identifier');
+        Schema::table('projects', static function (Blueprint $table) {
+            $table->string('identifier')->nullable()->unique()->after('id');
         });
     }
 
@@ -21,7 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
+        Schema::table('projects', static function (Blueprint $table) {
+            $table->dropUnique(['identifier']);
             $table->dropColumn('identifier');
         });
     }
