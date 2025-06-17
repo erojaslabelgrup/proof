@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\Api\Tasks;
 
-use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +24,10 @@ class IndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'filter_user_id' => 'nullable|integer|exists:users,id',
-            'filter_status' => 'nullable|string|in:' . implode(',', Task::STATUSES),
-            'page' => 'sometimes|integer|min:1',
-            'per_page' => 'sometimes|integer|min:1|max:100'
+            'user_id' => 'required|integer|exists:users,id',
+            'title' => 'required|string',
+            'status' => 'required|string|in:' . implode(',', \App\Models\Task::STATUSES),
+            'description' => 'nullable|string'
         ];
     }
 }

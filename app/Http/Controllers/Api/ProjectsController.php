@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Projects\IndexRequest;
 use App\Http\Requests\Api\Projects\StoreRequest;
+use App\Http\Requests\Api\Projects\UpdateRequest;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
+use App\UseCases\Projects\DestroyUseCase;
 use App\UseCases\Projects\ListUseCase;
 use App\UseCases\Projects\StoreUseCase;
+use App\UseCases\Projects\UpdateUseCase;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class ProjectsController extends Controller
 {
@@ -27,22 +29,24 @@ class ProjectsController extends Controller
         return (new StoreUseCase(
             identifier: $request->input('identifier'),
             name: $request->input('name'),
-            description: $request->input('description', null)
+            status: $request->input('status'),
+            description: $request->input('description')
         ))->handle()->responseToApi(true, ProjectResource::class);
     }
 
-    public function update($id, $request): JsonResponse
+    public function update(Project $project, UpdateRequest $request): JsonResponse
     {
-        $project = Project::where('id', $id)->first();
-        $project->update($request->all());
-
-        return response()->json($project->toArray());
+        return (new UpdateUseCase(
+            project: $project,
+            identifier: $request->input('identifier'),
+            name: $request->input('name'),
+            status: $request->input('status'),
+            description: $request->input('description')
+        ))->handle()->responseToApi(true, ProjectResource::class);
     }
 
     public function destroy(Project $project): JsonResponse
     {
-        $project->delete();
-
-        return response()->json(['message' => 'Project deleted successfully'], Response::HTTP_NO_CONTENT);
+        return (new DestroyUseCase($project))->handle()->responseToApi(true);
     }
 }

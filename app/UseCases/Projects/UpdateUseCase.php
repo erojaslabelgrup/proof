@@ -7,11 +7,10 @@ use Labelgrup\LaravelUtilities\Core\UseCases\UseCase;
 use Labelgrup\LaravelUtilities\Core\UseCases\WithValidateInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class StoreUseCase extends UseCase implements WithValidateInterface
+class UpdateUseCase extends UseCase implements WithValidateInterface
 {
-    public int $success_status_code = Response::HTTP_CREATED;
-
     public function __construct(
+        protected Project $project,
         protected string $identifier,
         protected string $name,
         protected string $status,
@@ -21,17 +20,19 @@ class StoreUseCase extends UseCase implements WithValidateInterface
 
     public function action(): Project
     {
-        return Project::create([
-            'identifier' => $this->identifier,
-            'name' => $this->name,
-            'status' => $this->status,
-            'description' => $this->description
-        ]);
+        $this->project->identifier = $this->identifier;
+        $this->project->name = $this->name;
+        $this->project->status = $this->status;
+        $this->project->description = $this->description;
+        $this->project->save();
+        $this->project->refresh();
+
+        return $this->project;
     }
 
     public function validate(): void
     {
-        if (Project::where('identifier', $this->identifier)->exists()) {
+        if (Project::where('identifier', $this->identifier)->where('id', '!=', $this->project->id)->exists()) {
             throw new \RuntimeException('Project with this identifier already exists', Response::HTTP_BAD_REQUEST);
         }
 

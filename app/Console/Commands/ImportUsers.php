@@ -28,25 +28,37 @@ class ImportUsers extends Command
      */
     public function handle(): int
     {
-        for ($page = 0; $page < 100000; $page++) {
-            $data = FakeImporter::users($page); // return param users and total_pages
+        try {
+            $total_pages = $this->importPage();
+            $this->info("Successfully imported users from {$total_pages} pages.");
 
-            if (empty($data['users'])) {
-                break;
-            }
+            return self::SUCCESS;
+        } catch (\Exception $e) {
+            $this->error('Error during user import: ' . $e->getMessage());
 
-            foreach ($data['users'] as $user_data) {
-                User::create([
-                    'name' => $user_data['name'],
-                    'email' => $user_data['email'],
-                    'password' => Hash::make($user_data['password']),
-                    'is_admin' => $user_data['is_admin'],
-                ]);
-            }
+            return self::FAILURE;
+        }
+    }
+
+    protected function importPage(int $page = 1): int
+    {
+        $data = FakeImporter::users($page);
+        $users = $data['users'] ?? [];
+        $total_pages = $data['total_pages'] ?? 0;
+
+        foreach ($users as $user) {
+            User::create([
+                'name' => $user['name'],
+                'email' => $user['email'],
+                'password' => Hash::make($user['password']),
+                'is_admin' => $user['is_admin'],
+            ]);
         }
 
-        $this->info('Import users completed successfully.');
+        if ($page < $total_pages) {
+            $this->importPage($page + 1);
+        }
 
-        return self::SUCCESS;
+        return $total_pages;
     }
 }

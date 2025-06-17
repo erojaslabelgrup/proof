@@ -3,21 +3,14 @@
 use App\Http\Controllers\Api\ProjectsController;
 use App\Http\Controllers\Api\TasksController;
 use App\Http\Controllers\Api\UsersController;
+use App\Http\Middleware\OnlyIsAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
-    // Projects
-    Route::get('proyectos', [ProjectsController::class, 'index'])->name('projects.index');
-    Route::post('proyectos', [ProjectsController::class, 'store'])->name('projects.store');
-    Route::put('proyectos/{id}', [ProjectsController::class, 'update'])->name('projects.update');
-    Route::delete('proyectos/{id}', [ProjectsController::class, 'destroy'])->name('projects.destroy');
-
-    // Tasks
-    Route::get('proyectos/{project}/tasks', [TasksController::class, 'index'])->name('projects.tasks.index');
-    Route::post('proyectos/{project}/tasks', [TasksController::class, 'store'])->name('projects.tasks.store');
-    Route::put('proyectos/{project}/tasks/{task}', [TasksController::class, 'update'])->name('projects.tasks.update');
-    Route::delete('proyectos/{project}/tasks/{task}', [TasksController::class, 'destroy'])->name('projects.tasks.destroy');
-    Route::get('proyectos/{project}/tasks/{task}', [TasksController::class, 'show'])->name('projects.tasks.show');
+    Route::prefix('projects')->middleware(OnlyIsAdmin::class)->name('projects.')->group(function () {
+        Route::apiResource('projects',  ProjectsController::class)->except(['show']);
+        Route::apiResource('{project}/tasks', TasksController::class);
+    });
 
     // Watchers
     Route::post('users/{user}/projects/{project}', [UsersController::class, 'watchProject'])->name('users.watch.project');

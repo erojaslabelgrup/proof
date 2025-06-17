@@ -12,11 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WatchUseCase extends UseCase implements WithValidateInterface
 {
+    use WatcherQuery;
+
     public int $success_status_code = Response::HTTP_CREATED;
 
     public function __construct(
-        User $user,
-        Project|Task $item
+        protected User $user,
+        protected Project|Task $watchable
     ) {
     }
 
@@ -26,13 +28,19 @@ class WatchUseCase extends UseCase implements WithValidateInterface
 	* handle(): Method to called to get UseCaseResponse
 	* perform(): Method to call $this->validate() (if implemented) and if no throw exception, call & return $this->action()
 	*/
-	public function action()
+	public function action(): Watcher
 	{
-		// TODO Implement action
+        return Watcher::create([
+            'user_id' => $this->user->id,
+            'watchable_type' => get_class($this->watchable),
+            'watchable_id' => $this->watchable->id,
+        ]);
 	}
 
 	public function validate(): void
 	{
-        // TODO Implement validation
+        if ($this->queryFindWatcher($this->user, $this->watchable)->exists()) {
+            throw new \RuntimeException('User is already watching this item', Response::HTTP_BAD_REQUEST);
+        }
 	}
 }
