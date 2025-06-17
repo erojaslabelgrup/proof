@@ -69,6 +69,12 @@ Route::middleware(\App\Http\Middleware\OnlyIsAdmin::class)->prefix('projects')->
 > 
 > Para implementar esto, modificaría el modelo `Watcher` para incluir una relación polimórfica y crearía las migraciones necesarias para agregar las columnas `watchable_id` y `watchable_type` en la tabla `watchers`.
 
+:red_circle: Tenemos un servicio que queremos usar en distintos proyectos. ¿Que planteamiento harías?
+> Crearía un paquete de Laravel que encapsule la lógica del servicio y lo haga reutilizable en diferentes proyectos. Este paquete podría ser instalado a través de Composer y configurado según las necesidades de cada proyecto.
+
+:red_circle: Dado el servicio anterior, ¿como solventarias la evolución de este cuando haya cambios que rompe la compatibilidad en proyectos donde se usa?
+> Implementaría un sistema de versiones en el paquete del servicio. Cada vez que se realice un cambio que rompa la compatibilidad, incrementaría la versión principal del paquete y documentaría los cambios necesarios para actualizar los proyectos que lo utilizan. Además, proporcionaría una guía de migración para facilitar la actualización a los desarrolladores.
+
 ### Command `ImportadorUsuarios` teniendo en cuenta que el FakeImporter es un request a una API externa
 ¿Porque está mal el código?
 - :green_circle: No hay una validación, ni se mira si el usuario ya existe lo que dará conflictos al insertar.
