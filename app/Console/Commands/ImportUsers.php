@@ -47,12 +47,14 @@ class ImportUsers extends Command
         $total_pages = $data['total_pages'] ?? 0;
 
         foreach ($users as $user) {
-            User::create([
-                'name' => $user['name'],
-                'email' => $user['email'],
-                'password' => Hash::make($user['password']),
-                'is_admin' => $user['is_admin'],
-            ]);
+            if (!User::where('email', $user['email'])->exists()) {
+                User::create([
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                    'password' => Hash::make($user['password']),
+                    'is_admin' => $user['is_admin'],
+                ]);
+            }
         }
 
         if ($page < $total_pages) {
